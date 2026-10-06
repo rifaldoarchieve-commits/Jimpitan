@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kas Jimpitan RT 003</title>
+  <style>
+    :root {
+      --bg: #f4f7f3;
+      --surface: #ffffff;
+      --surface-soft: #f8faf7;
+      --ink: #1f2b24;
+      --muted: #66736b;
+      --line: #dfe7df;
+      --green: #2f6b45;
+      --green-dark: #214b31;
+      --green-soft: #e8f2eb;
+      --accent: #eef4c9;
+      --danger: #9f3a38;
+      --shadow: 0 10px 30px rgba(38, 63, 47, .08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .app-shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: var(--green);
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: .04em;
+      box-shadow: var(--shadow);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(20px, 3vw, 28px);
+      line-height: 1.15;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .save-state {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--green-dark), var(--green));
+      color: white;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 430px);
+      gap: 28px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 800;
+      opacity: .82;
+      margin-bottom: 10px;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(26px, 5vw, 40px);
+      line-height: 1.08;
+      max-width: 720px;
+    }
+
+    .hero p {
+      margin: 12px 0 0;
+      color: rgba(255,255,255,.82);
+      max-width: 700px;
+    }
+
+    .identity-panel {
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 18px;
+      padding: 18px;
+      backdrop-filter: blur(8px);
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    input[type="date"],
+    input[type="month"],
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      padding: 11px 12px;
+      border-radius: 11px;
+      outline: none;
+      transition: .18s ease;
+    }
+
+    .identity-panel input {
+      border-color: transparent;
+      background: rgba(255,255,255,.96);
+    }
+
+    input:focus {
+      border-color: #8eb49b;
+      box-shadow: 0 0 0 3px rgba(47, 107, 69, .12);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .stack { display: grid; gap: 18px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 20px 22px 12px;
+    }
+
+    .card-head h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .card-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .card-body { padding: 10px 22px 22px; }
+
+    .saldo-box {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+      gap: 18px;
+      align-items: end;
+    }
+
+    .saldo-box .hint {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .money-wrap { position: relative; }
+    .money-wrap span {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-weight: 700;
+      pointer-events: none;
+    }
+    .money-wrap input { padding-left: 36px; text-align: right; font-weight: 700; }
+
+    .rows {
+      display: grid;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .row-item {
+      display: grid;
+      grid-template-columns: 54px 1fr 180px 42px;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--surface-soft);
+    }
+
+    .row-item.simple {
+      grid-template-columns: 54px 1fr 180px 42px;
+    }
+
+    .row-num {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--green-soft);
+      color: var(--green-dark);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .remove-btn {
+      width: 38px;
+      height: 38px;
+      border: none;
+      border-radius: 10px;
+      background: #fff0ef;
+      color: var(--danger);
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .remove-btn:hover { background: #ffe5e3; }
+
+    .section-actions {
+      margin-top: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 11px;
+      padding: 11px 15px;
+      font-weight: 800;
+      transition: .18s ease;
+    }
+
+    .btn-primary { background: var(--green); color: white; }
+    .btn-primary:hover { background: var(--green-dark); }
+    .btn-soft { background: var(--green-soft); color: var(--green-dark); }
+    .btn-soft:hover { background: #dcecdf; }
+    .btn-ghost { background: transparent; border: 1px solid var(--line); color: var(--ink); }
+    .btn-ghost:hover { background: var(--surface-soft); }
+
+    .section-total {
+      font-weight: 800;
+      color: var(--green-dark);
+      font-size: 14px;
+    }
+
+    .summary-card {
+      position: sticky;
+      top: 18px;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .summary-line {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .summary-line strong { color: var(--ink); white-space: nowrap; }
+
+    .summary-divider {
+      height: 1px;
+      background: var(--line);
+      margin: 4px 0;
+    }
+
+    .final-balance {
+      border-radius: 16px;
+      padding: 18px;
+      background: var(--accent);
+      margin-top: 16px;
+    }
+
+    .final-balance small {
+      display: block;
+      color: #526033;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 4px;
+    }
+
+    .final-balance .value {
+      font-weight: 900;
+      color: #253214;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    .export-grid {
+      display: grid;
+      gap: 9px;
+      margin-top: 16px;
+    }
+
+    .note {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .preview-wrap { margin-top: 22px; }
+    .preview-toggle { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+
+    .report-paper {
+      width: min(900px, 100%);
+      margin: 0 auto;
+      background: white;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 44px 54px;
+      color: #111;
+    }
+
+    .report-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .report-title h2 { margin: 0; font-size: 20px; letter-spacing: .02em; }
+    .report-title p { margin: 4px 0 0; font-size: 13px; }
+
+    .report-section { margin-top: 22px; }
+    .report-section h4 { margin: 0 0 8px; font-size: 14px; }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .report-table th,
+    .report-table td {
+      border: 1px solid #bfc8bf;
+      padding: 8px 9px;
+      vertical-align: top;
+    }
+
+    .report-table th { background: #edf2df; text-align: left; }
+    .report-table .num { text-align: right; white-space: nowrap; }
+    .report-table .total-row td { font-weight: 800; background: #f6f8ec; }
+
+    .report-balance {
+      margin-top: 22px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .report-balance-box {
+      min-width: 320px;
+      border: 1px solid #aeb99c;
+      background: #eaf1b8;
+      padding: 12px 14px;
+    }
+
+    .report-balance-box .label { font-size: 12px; font-weight: 800; }
+    .report-balance-box .amount { margin-top: 2px; font-size: 20px; font-weight: 900; text-align: right; }
+
+    .signatures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      margin-top: 34px;
+      font-size: 13px;
+    }
+
+    .signature { min-height: 118px; display: flex; flex-direction: column; }
+    .signature.right { text-align: right; align-items: flex-end; }
+    .signature .name { margin-top: auto; font-weight: 700; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 26px;
+      transform: translate(-50%, 18px);
+      background: #1d2a21;
+      color: white;
+      padding: 11px 16px;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: .22s ease;
+      z-index: 50;
+      font-size: 13px;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 900px) {
+      .hero-grid, .layout { grid-template-columns: 1fr; }
+      .summary-card { position: static; }
+      .saldo-box { grid-template-columns: 1fr; }
+      .row-item, .row-item.simple {
+        grid-template-columns: 42px 1fr 42px;
+      }
+      .row-item .amount-cell { grid-column: 2 / 3; }
+      .row-item .remove-btn { grid-column: 3 / 4; grid-row: 1; }
+      .row-item .main-cell { grid-column: 2 / 3; }
+      .report-paper { padding: 32px 24px; }
+    }
+
+    @media (max-width: 620px) {
+      .app-shell { width: min(100% - 18px, 1180px); padding-top: 14px; }
+      .topbar { align-items: flex-start; }
+      .save-state { display: none; }
+      .hero { padding: 22px 18px; }
+      .field-grid { grid-template-columns: 1fr; }
+      .card-head, .card-body { padding-left: 16px; padding-right: 16px; }
+      .row-item, .row-item.simple { grid-template-columns: 36px 1fr 38px; padding: 9px; }
+      .signatures { gap: 24px; }
+      .report-paper { padding: 26px 16px; }
+    }
+
+    @page { size: A4; margin: 15mm; }
+
+    @media print {
+      body { background: white; }
+      .app-shell > :not(.preview-wrap),
+      .preview-toggle { display: none !important; }
+      .app-shell { width: 100%; padding: 0; margin: 0; }
+      .preview-wrap { margin: 0; }
+      .report-paper {
+        width: 100%;
+        max-width: none;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+      }
+      .toast { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">RT</div>
+        <div>
+          <h1>Kas Jimpitan RT 003</h1>
+          <p>RT 003 / RW 012 · Villa Permata Blok CB</p>
+        </div>
+      </div>
+      <div class="save-state" id="saveState">Data tersimpan di perangkat ini</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Laporan kas sederhana</div>
+          <h2>Isi transaksi, totalnya dihitung otomatis.</h2>
+          <p>Form dibuat ringkas agar mudah digunakan. Identitas wilayah tetap, sehingga yang perlu dipilih hanya periode laporan dan tanggal laporan.</p>
+        </div>
+        <div class="identity-panel">
+          <div class="field-grid">
+            <div>
+              <label for="period">Periode</label>
+              <input type="month" id="period" />
+            </div>
+            <div>
+              <label for="reportDate">Tanggal laporan</label>
+              <input type="date" id="reportDate" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="stack">
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h3>Saldo Awal</h3>
+              <p id="openingLabel">Saldo kas dari periode sebelumnya.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="saldo-box">
+              <p class="hint">Masukkan saldo akhir dari bulan sebelumnya. Nilai ini akan menjadi dasar perhitungan saldo akhir periode berjalan.</p>
+              <div>
+                <label for="openingBalance">Saldo awal kas</label>
+                <div class="money-wrap">
+                  <span>Rp</span>
+                  <input id="openingBalance" type="number" min="0" step="500" inputmode="numeric" placeholder="0" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h3>Hasil Jimpitan</h3>
+              <p>Masukkan tanggal penarikan dan nominal yang terkumpul.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="rows" id="jimpitanRows"></div>
+            <div class="section-actions">
+              <button class="btn btn-soft" type="button" id="addJimpitan">+ Tambah Jimpitan</button>
+              <div class="section-total">Total: <span id="jimpitanTotal">Rp0</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h3>Pemasukan Lainnya</h3>
+              <p>Contoh: kompensasi ketidakhadiran atau penerimaan lain di luar jimpitan.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="rows" id="incomeRows"></div>
+            <div class="section-actions">
+              <button class="btn btn-soft" type="button" id="addIncome">+ Tambah Pemasukan</button>
+              <div class="section-total">Total: <span id="incomeTotal">Rp0</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h3>Pengeluaran</h3>
+              <p>Masukkan setiap pembelian atau pengeluaran kas pada periode ini.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="rows" id="expenseRows"></div>
+            <div class="section-actions">
+              <button class="btn btn-soft" type="button" id="addExpense">+ Tambah Pengeluaran</button>
+              <div class="section-total">Total: <span id="expenseTotal">Rp0</span></div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <aside class="card summary-card">
+        <div class="card-head">
+          <div>
+            <h3>Ringkasan Kas</h3>
+            <p>Berubah otomatis saat data diisi.</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="summary-list">
+            <div class="summary-line"><span>Saldo awal</span><strong id="sumOpening">Rp0</strong></div>
+            <div class="summary-line"><span>Hasil jimpitan</span><strong id="sumJimpitan">Rp0</strong></div>
+            <div class="summary-line"><span>Pemasukan lainnya</span><strong id="sumIncome">Rp0</strong></div>
+            <div class="summary-divider"></div>
+            <div class="summary-line"><span>Total dana tersedia</span><strong id="sumAvailable">Rp0</strong></div>
+            <div class="summary-line"><span>Total pengeluaran</span><strong id="sumExpense">Rp0</strong></div>
+          </div>
+
+          <div class="final-balance">
+            <small>Saldo akhir</small>
+            <div class="value" id="sumFinal">Rp0</div>
+          </div>
+
+          <div class="export-grid">
+            <button class="btn btn-primary" id="saveBtn" type="button">Simpan Data</button>
+            <button class="btn btn-ghost" id="csvBtn" type="button">Unduh CSV</button>
+            <button class="btn btn-ghost" id="pdfBtn" type="button">Cetak / Unduh PDF</button>
+          </div>
+          <p class="note">PDF menggunakan menu cetak browser. Pilih <strong>Save as PDF</strong> / <strong>Simpan sebagai PDF</strong>.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="preview-wrap" id="preview">
+      <div class="preview-toggle">
+        <button class="btn btn-ghost" id="scrollTopBtn" type="button">↑ Kembali ke input</button>
+      </div>
+      <div class="report-paper">
+        <div class="report-title">
+          <h2>LAPORAN KAS JIMPITAN</h2>
+          <p>RT 003 / RW 012 – VILLA PERMATA BLOK CB</p>
+          <p id="reportPeriodText">Periode -</p>
+        </div>
+
+        <div class="report-section">
+          <h4>A. Hasil Jimpitan</h4>
+          <table class="report-table">
+            <thead><tr><th style="width:52px">No.</th><th>Tanggal</th><th style="width:180px">Penerimaan</th></tr></thead>
+            <tbody id="reportJimpitanBody"></tbody>
+          </table>
+        </div>
+
+        <div class="report-section">
+          <h4>B. Rekapitulasi Pemasukan</h4>
+          <table class="report-table">
+            <thead><tr><th>Keterangan</th><th style="width:180px">Nominal</th></tr></thead>
+            <tbody id="reportIncomeBody"></tbody>
+          </table>
+        </div>
+
+        <div class="report-section">
+          <h4>C. Pengeluaran</h4>
+          <table class="report-table">
+            <thead><tr><th>Keterangan</th><th style="width:180px">Nominal</th></tr></thead>
+            <tbody id="reportExpenseBody"></tbody>
+          </table>
+        </div>
+
+        <div class="report-balance">
+          <div class="report-balance-box">
+            <div class="label">SALDO AKHIR KAS JIMPITAN</div>
+            <div class="amount" id="reportFinalBalance">Rp0</div>
+          </div>
+        </div>
+
+        <div style="text-align:right; margin-top:28px; font-size:13px" id="reportDateText">Villa Permata, -</div>
+
+        <div class="signatures">
+          <div class="signature">
+            <div>Mengetahui,</div>
+            <div>Ketua RT 003</div>
+            <div class="name">Sudarsono</div>
+          </div>
+          <div class="signature right">
+            <div>Bendahara III</div>
+            <div class="name">Teguh Rahayu</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Data tersimpan</div>
+
+  <script>
+    const STORAGE_KEY = 'kas-jimpitan-rt003-v1';
+
+    const initialData = {
+      period: '2026-09',
+      reportDate: '2026-09-30',
+      openingBalance: 1892000,
+      jimpitan: [
+        { date: '2026-09-05', amount: 100000 },
+        { date: '2026-09-12', amount: 112500 },
+        { date: '2026-09-19', amount: 110000 },
+        { date: '2026-09-26', amount: 84000 }
+      ],
+      income: [
+        { description: 'Kompensasi ketidakhadiran Bp. Teguh Waluyo', amount: 50000 },
+        { description: 'Kompensasi ketidakhadiran Bp. Muhib', amount: 50000 },
+        { description: 'Kompensasi ketidakhadiran Bp. Widhian', amount: 50000 }
+      ],
+      expense: [
+        { description: 'Beli 2 bh Bed + Bola Pingpong', amount: 115000 },
+        { description: 'Beli pisau mesin potong rumput', amount: 52500 }
+      ]
+    };
+
+    const state = loadData();
+
+    const el = id => document.getElementById(id);
+    const rp = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(n) || 0);
+    const num = v => Math.max(0, Number(v) || 0);
+
+    function formatDateID(value) {
+      if (!value) return '-';
+      const d = new Date(value + 'T00:00:00');
+      return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
+    }
+
+    function formatPeriod(value) {
+      if (!value) return '-';
+      const [y,m] = value.split('-').map(Number);
+      return new Intl.DateTimeFormat('id-ID', { month: 'long', year: 'numeric' }).format(new Date(y, m - 1, 1));
+    }
+
+    function previousPeriodText(value) {
+      if (!value) return 'periode sebelumnya';
+      const [y,m] = value.split('-').map(Number);
+      const d = new Date(y, m - 2, 1);
+      return new Intl.DateTimeFormat('id-ID', { month: 'long', year: 'numeric' }).format(d);
+    }
+
+    function loadData() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : structuredClone(initialData);
+      } catch {
+        return JSON.parse(JSON.stringify(initialData));
+      }
+    }
+
+    function saveData(showMessage = true) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      el('saveState').textContent = 'Tersimpan · ' + new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+      if (showMessage) showToast('Data berhasil disimpan');
+    }
+
+    function showToast(message) {
+      const toast = el('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    function rowTemplate(type, item, index) {
+      if (type === 'jimpitan') {
+        return `
+          <div class="row-item" data-type="${type}" data-index="${index}">
+            <div class="row-num">${index + 1}</div>
+            <div class="main-cell"><input class="row-date" type="date" value="${item.date || ''}" aria-label="Tanggal jimpitan ${index + 1}"></div>
+            <div class="amount-cell money-wrap"><span>Rp</span><input class="row-amount" type="number" min="0" step="500" inputmode="numeric" value="${num(item.amount) || ''}" placeholder="0" aria-label="Nominal jimpitan ${index + 1}"></div>
+            <button class="remove-btn" type="button" title="Hapus baris" aria-label="Hapus baris">×</button>
+          </div>`;
+      }
+      const placeholder = type === 'income' ? 'Keterangan pemasukan' : 'Keterangan pengeluaran';
+      return `
+        <div class="row-item simple" data-type="${type}" data-index="${index}">
+          <div class="row-num">${index + 1}</div>
+          <div class="main-cell"><input class="row-description" type="text" value="${escapeHtml(item.description || '')}" placeholder="${placeholder}" aria-label="${placeholder} ${index + 1}"></div>
+          <div class="amount-cell money-wrap"><span>Rp</span><input class="row-amount" type="number" min="0" step="500" inputmode="numeric" value="${num(item.amount) || ''}" placeholder="0" aria-label="Nominal ${index + 1}"></div>
+          <button class="remove-btn" type="button" title="Hapus baris" aria-label="Hapus baris">×</button>
+        </div>`;
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[c]));
+    }
+
+    function renderRows() {
+      el('jimpitanRows').innerHTML = state.jimpitan.map((x,i) => rowTemplate('jimpitan', x, i)).join('');
+      el('incomeRows').innerHTML = state.income.map((x,i) => rowTemplate('income', x, i)).join('');
+      el('expenseRows').innerHTML = state.expense.map((x,i) => rowTemplate('expense', x, i)).join('');
+      bindRowEvents();
+    }
+
+    function bindRowEvents() {
+      document.querySelectorAll('.row-item').forEach(row => {
+        const type = row.dataset.type;
+        const index = Number(row.dataset.index);
+        const amount = row.querySelector('.row-amount');
+        amount.addEventListener('input', () => {
+          state[type][index].amount = num(amount.value);
+          refresh();
+        });
+
+        const date = row.querySelector('.row-date');
+        if (date) date.addEventListener('input', () => {
+          state[type][index].date = date.value;
+          refresh();
+        });
+
+        const desc = row.querySelector('.row-description');
+        if (desc) desc.addEventListener('input', () => {
+          state[type][index].description = desc.value;
+          refresh();
+        });
+
+        row.querySelector('.remove-btn').addEventListener('click', () => {
+          state[type].splice(index, 1);
+          renderRows();
+          refresh();
+        });
+      });
+    }
+
+    function totals() {
+      const opening = num(state.openingBalance);
+      const jimpitan = state.jimpitan.reduce((s,x) => s + num(x.amount), 0);
+      const income = state.income.reduce((s,x) => s + num(x.amount), 0);
+      const expense = state.expense.reduce((s,x) => s + num(x.amount), 0);
+      const available = opening + jimpitan + income;
+      const finalBalance = available - expense;
+      return { opening, jimpitan, income, expense, available, finalBalance };
+    }
+
+    function refresh() {
+      const t = totals();
+      el('jimpitanTotal').textContent = rp(t.jimpitan);
+      el('incomeTotal').textContent = rp(t.income);
+      el('expenseTotal').textContent = rp(t.expense);
+      el('sumOpening').textContent = rp(t.opening);
+      el('sumJimpitan').textContent = rp(t.jimpitan);
+      el('sumIncome').textContent = rp(t.income);
+      el('sumAvailable').textContent = rp(t.available);
+      el('sumExpense').textContent = rp(t.expense);
+      el('sumFinal').textContent = rp(t.finalBalance);
+      el('openingLabel').textContent = `Saldo kas akhir periode ${previousPeriodText(state.period)}.`;
+      renderReport(t);
+    }
+
+    function renderReport(t) {
+      el('reportPeriodText').textContent = `Periode ${formatPeriod(state.period)}`;
+      el('reportDateText').textContent = `Villa Permata, ${formatDateID(state.reportDate)}`;
+      el('reportFinalBalance').textContent = rp(t.finalBalance);
+
+      const jRows = state.jimpitan.filter(x => x.date || num(x.amount) > 0);
+      el('reportJimpitanBody').innerHTML = [
+        ...jRows.map((x,i) => `<tr><td>${i+1}</td><td>${formatDateID(x.date)}</td><td class="num">${rp(x.amount)}</td></tr>`),
+        `<tr class="total-row"><td colspan="2">Total Hasil Jimpitan</td><td class="num">${rp(t.jimpitan)}</td></tr>`
+      ].join('');
+
+      const incomeRows = [
+        `<tr><td>Saldo awal periode (${previousPeriodText(state.period)})</td><td class="num">${rp(t.opening)}</td></tr>`,
+        `<tr><td>Hasil jimpitan ${formatPeriod(state.period)}</td><td class="num">${rp(t.jimpitan)}</td></tr>`,
+        ...state.income.filter(x => x.description || num(x.amount) > 0).map(x => `<tr><td>${escapeHtml(x.description || '-')}</td><td class="num">${rp(x.amount)}</td></tr>`),
+        `<tr class="total-row"><td>Total Dana Tersedia</td><td class="num">${rp(t.available)}</td></tr>`
+      ];
+      el('reportIncomeBody').innerHTML = incomeRows.join('');
+
+      const expenseRows = state.expense.filter(x => x.description || num(x.amount) > 0);
+      el('reportExpenseBody').innerHTML = [
+        ...expenseRows.map(x => `<tr><td>${escapeHtml(x.description || '-')}</td><td class="num">${rp(x.amount)}</td></tr>`),
+        `<tr class="total-row"><td>Total Pengeluaran</td><td class="num">${rp(t.expense)}</td></tr>`
+      ].join('');
+    }
+
+    function addRow(type) {
+      if (type === 'jimpitan') state.jimpitan.push({ date: state.period ? `${state.period}-01` : '', amount: 0 });
+      else state[type].push({ description: '', amount: 0 });
+      renderRows();
+      refresh();
+      requestAnimationFrame(() => {
+        const rows = document.querySelectorAll(`[data-type="${type}"]`);
+        const last = rows[rows.length - 1];
+        last?.querySelector('input')?.focus();
+      });
+    }
+
+    function csvEscape(value) {
+      const s = String(value ?? '');
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+
+    function downloadCSV() {
+      const t = totals();
+      const lines = [['Periode','Kategori','Tanggal','Keterangan','Nominal']];
+      lines.push([formatPeriod(state.period),'Saldo Awal','','Saldo awal periode',t.opening]);
+      state.jimpitan.forEach(x => lines.push([formatPeriod(state.period),'Jimpitan',x.date,'Hasil jimpitan',num(x.amount)]));
+      state.income.forEach(x => lines.push([formatPeriod(state.period),'Pemasukan Lain','',''+(x.description || ''),num(x.amount)]));
+      state.expense.forEach(x => lines.push([formatPeriod(state.period),'Pengeluaran','',''+(x.description || ''),num(x.amount)]));
+      lines.push([formatPeriod(state.period),'Ringkasan','','Saldo akhir',t.finalBalance]);
+
+      const csv = '\ufeff' + lines.map(row => row.map(csvEscape).join(';')).join('\r\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `kas-jimpitan-${state.period || 'periode'}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast('CSV berhasil diunduh');
+    }
+
+    el('period').value = state.period || '';
+    el('reportDate').value = state.reportDate || '';
+    el('openingBalance').value = num(state.openingBalance) || '';
+
+    el('period').addEventListener('input', e => { state.period = e.target.value; refresh(); });
+    el('reportDate').addEventListener('input', e => { state.reportDate = e.target.value; refresh(); });
+    el('openingBalance').addEventListener('input', e => { state.openingBalance = num(e.target.value); refresh(); });
+
+    el('addJimpitan').addEventListener('click', () => addRow('jimpitan'));
+    el('addIncome').addEventListener('click', () => addRow('income'));
+    el('addExpense').addEventListener('click', () => addRow('expense'));
+    el('saveBtn').addEventListener('click', () => saveData(true));
+    el('csvBtn').addEventListener('click', downloadCSV);
+    el('pdfBtn').addEventListener('click', () => { refresh(); window.print(); });
+    el('scrollTopBtn').addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+    // Simpan otomatis setiap perubahan, tanpa mengganggu pengguna.
+    let autoSaveTimer;
+    document.addEventListener('input', () => {
+      clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(() => saveData(false), 500);
+    });
+
+    renderRows();
+    refresh();
+  </script>
+</body>
+</html>
